@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { View, Text } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+//import { NavigationContainer } from '@react-navigation/native';
+//import { createStackNavigator } from '@react-navigation/stack';
+import SwitchNavigator from './src/navigation/SwitchNavigator'
+import LoginScreen from './src/screens/LoginScreen'
 
 function HomeScreen(){
   return(
@@ -11,15 +13,20 @@ function HomeScreen(){
   );
 }
 
-const Stack = createStackNavigator();
+//const Stack = createStackNavigator();
 
-function App(){
-  return(
-     <NavigationContainer>
+
+/*
+   <NavigationContainer>
        <Stack.Navigator>
           <Stack.Screen name="Home" component={HomeScreen} /> 
+          <Stack.Screen name="Login" component={LoginScreen} /> 
        </Stack.Navigator>  
-     </NavigationContainer>  
+     </NavigationContainer>
+*/
+function App(){
+  return(     
+     <SwitchNavigator /> 
   );
 }
 
