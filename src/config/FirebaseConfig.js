@@ -8,9 +8,9 @@ const firebaseConfig = {
     messagingSenderId: "1020307746524",
     appId: "1:1020307746524:web:08d76b14c9a1698ef34e19",
     measurementId: "G-BG6ZBDNS9G",
-    databaseURL: 'https://expense-tracker-5002f.firebaseio.com',
+    
 }
-
+//databaseURL: 'https://expense-tracker-5002f.firebaseio.com',
 // Initialize Firebase
 const Firebase = firebase.initializeApp(firebaseConfig);
 

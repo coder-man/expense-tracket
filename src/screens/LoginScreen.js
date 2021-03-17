@@ -1,11 +1,21 @@
 import React, { Component } from 'react';
-import { View, TextInput, StyleSheet, TouchableOpacity, Text, Button } from 'react-native';
+import { View, TextInput, StyleSheet, TouchableOpacity, Text, Button, ToastAndroid } from 'react-native';
+import Firebase from '../config/FirebaseConfig';
 
 class LoginScreen extends Component{
 
     state ={
         email: '',
         password: '',
+    }
+
+    handleLogin = () => {
+        const { email, password } = this.state
+        ToastAndroid.show('Login click', ToastAndroid.SHORT);
+        Firebase.auth()
+             .signInWithEmailAndPassword( email, password)
+             .then(() => this.props.navigation.navigate('Profile'))
+             .catch(error => console.log(error))
     }
 
     render(){
@@ -25,7 +35,7 @@ class LoginScreen extends Component{
                   placeholder = 'Password'
                   secureTextEntry={true}
               />  
-              <TouchableOpacity style={styles.button}>
+              <TouchableOpacity style={styles.button} onPress={this.handleLogin}>
                   <Text style={styles.buttonText}>Login</Text>
               </TouchableOpacity>    
               <Button title="Don't have an account yet? Sign up" onPress={() => this.props.navigation.navigate('SignupScreen')} />

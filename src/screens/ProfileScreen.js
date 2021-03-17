@@ -1,14 +1,24 @@
 import React, { Component } from 'react';
 import { View, TextInput, StyleSheet, TouchableOpacity, Text, Button } from 'react-native';
+import Firebase from '../config/FirebaseConfig';
 
 class ProfileScreen extends Component{
 
+    logOut = () => {
+        Firebase.auth().signOut().then(() => {
+            this.props.navigation.navigate('LoginScreen')            
+        }).catch(error => console.log(error));
+    }
+
     render(){
         return(
-           <View style={styles.container}>
-             
+           <View style={styles.container}>             
                   <Text style={styles.buttonText}>Profile Screen</Text>
-             
+                  <Button
+                    color="#3740FE"
+                    title="Logout"
+                    onPress={() => this.logOut()}
+                  />                  
            </View>       
         ); 
     }
@@ -43,8 +53,9 @@ const styles = StyleSheet.create({
     },
     buttonText:{
         fontSize: 20,
+        textAlign: 'center',
         fontWeight: 'bold',
-        color: '#FFFFFF'
+        color: '#FFFFFF',
     },
     buttonSignUp: {
         fontSize: 12

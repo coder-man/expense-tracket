@@ -1,22 +1,29 @@
 import React from 'react';
-import { View, TextInput, StyleSheet, TouchableOpacity, Text, Button } from 'react-native';
+import { View, TextInput, StyleSheet, TouchableOpacity, Text, Button, ToastAndroid } from 'react-native';
+
 import Firebase from '../config/FirebaseConfig'
 
 class SignupScreen extends React.Component{
 
-    state ={
-        name: '',
-        email: '',
-        password: ''
+    constructor(props){
+        super(props);
+        this.state = {
+            showToast: false,
+            name: '',
+            email: '',
+            password: ''
+        }
+       // this.handleSignUp = this.handleSignUp.bind(this);
     }
 
     handleSignUp = () => {
         const { email, password } = this.state;
-        console.log('Signup press', email, password);
+        //console.log('Signup press', email, password);
+        ToastAndroid.show('Submit click', ToastAndroid.SHORT);
         Firebase.auth()
             .createUserWithEmailAndPassword(email, password)
             .then(() => this.props.navigation.navigate('ProfileScreen'))
-            .catch(error => console.log(error))
+            .catch(error => console.log(error)); 
     }
 
     render(){
@@ -30,7 +37,7 @@ class SignupScreen extends React.Component{
                 />
 
                 <TextInput 
-                    style={styles.inputBox}
+                    style={styles.inputBox} 
                     value={this.state.email}
                     onChangeText={email => this.setState({ email })}
                     placeholder='Email'
@@ -44,7 +51,7 @@ class SignupScreen extends React.Component{
                    placeholder = 'Password'
                    securityTextEntry={true}
                 />
-                <TouchableOpacity style={styles.button} onPress={this.handleSignup}>
+                <TouchableOpacity style={styles.button} onPress={this.handleSignUp}>
                     <Text style={styles.bottonText}>Signup</Text>
                 </TouchableOpacity>
                 <Button title="Go to Login" onPress={() => this.props.navigation.navigate('LoginScreen')} />
