@@ -1,21 +1,22 @@
 import React, { Component } from 'react';
 import { View, TextInput, StyleSheet, TouchableOpacity, Text, Button, ToastAndroid } from 'react-native';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { updateEmail, updatePassword, login, getUser } from '../actions/user'
+
 import Firebase from '../config/FirebaseConfig';
 
 class LoginScreen extends Component{
 
-    state ={
-        email: '',
-        password: '',
-    }
-
-    handleLogin = () => {
-        const { email, password } = this.state
-        ToastAndroid.show('Login click', ToastAndroid.SHORT);
-        Firebase.auth()
-             .signInWithEmailAndPassword( email, password)
-             .then(() => this.props.navigation.navigate('Profile'))
-             .catch(error => console.log(error))
+    componentDidMount = () => {
+        Firebase.auth().onAuthStateChanged(user => {
+            if(user) {
+                this.props.getUser(user.uid);
+                   if(this.props.user != null){
+                       this.props.navigation.navigate('ProfileScreen');
+                   }
+            }
+        })
     }
 
     render(){
@@ -23,19 +24,19 @@ class LoginScreen extends Component{
            <View style={styles.container}>
               <TextInput
                  style={styles.inputBox}
-                 value={this.state.email}
-                 onChangeText={email => this.setState({ email })}
+                 value={this.props.user.email}
+                 onChangeText={email => this.props.updateEmail(email)}
                  placeholder = 'Email'
                  autoCapitalize = 'none'
               />
               <TextInput
                   style={styles.inputBox}
-                  value= {this.state.password}
-                  onChangeText={password => this.setState({ password })}
+                  value= {this.props.user.password}
+                  onChangeText={password => this.props.updatePassword(password)}
                   placeholder = 'Password'
                   secureTextEntry={true}
               />  
-              <TouchableOpacity style={styles.button} onPress={this.handleLogin}>
+              <TouchableOpacity style={styles.button} onPress={() => this.props.login()}>
                   <Text style={styles.buttonText}>Login</Text>
               </TouchableOpacity>    
               <Button title="Don't have an account yet? Sign up" onPress={() => this.props.navigation.navigate('SignupScreen')} />
@@ -47,7 +48,7 @@ class LoginScreen extends Component{
 const styles = StyleSheet.create({
     container:{
         flex: 1,
-        backgroundColor: '#ffffff',
+        backgroundColor: '#a54de8',
         alignItems: 'center',
         justifyContent: 'center'
     },
@@ -79,6 +80,17 @@ const styles = StyleSheet.create({
     buttonSignUp: {
         fontSize: 12
     }
-})
+});
 
-export default LoginScreen;
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators({ updateEmail, updatePassword, login, getUser}, dispatch);
+}
+
+const mapStateToProps = state => {
+    return {
+        user: state.user
+    }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps) (LoginScreen);

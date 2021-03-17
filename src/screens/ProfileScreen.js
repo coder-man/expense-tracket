@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { View, TextInput, StyleSheet, TouchableOpacity, Text, Button } from 'react-native';
+import { View, StyleSheet, Text, Button } from 'react-native';
+import { connect } from 'react-redux'
 import Firebase from '../config/FirebaseConfig';
 
 class ProfileScreen extends Component{
@@ -13,7 +14,8 @@ class ProfileScreen extends Component{
     render(){
         return(
            <View style={styles.container}>             
-                  <Text style={styles.buttonText}>Profile Screen</Text>
+                  <Text>Profile Screen</Text>
+                  <Text>{ this.props.user.email }</Text>
                   <Button
                     color="#3740FE"
                     title="Logout"
@@ -31,35 +33,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
-    inputBox:{
-        width: '85%',
-        margin: 10,
-        padding: 15,
-        fontSize: 16,
-        borderColor: '#d3d3d3',
-        borderBottomWidth: 1,
-        textAlign: 'center'
-    },
-    button: {
-        marginTop: 30,
-        marginBottom: 20,
-        paddingVertical: 5,
-        alignItems: 'center',
-        backgroundColor: '#F6820D',
-        borderColor: '#F6820D',
-        borderWidth: 1,
-        borderRadius: 5,
-        width: 200
-    },
-    buttonText:{
-        fontSize: 20,
-        textAlign: 'center',
-        fontWeight: 'bold',
-        color: '#FFFFFF',
-    },
-    buttonSignUp: {
-        fontSize: 12
-    }
-})
+});
 
-export default ProfileScreen;
+const mapStateToProps = state => {
+    return {
+        user: state.user
+    }
+}
+
+export default connect(mapStateToProps)(ProfileScreen);

@@ -1,20 +1,18 @@
 import * as React from 'react';
-import { View, Text } from 'react-native';
 //import { NavigationContainer } from '@react-navigation/native';
 //import { createStackNavigator } from '@react-navigation/stack';
-import SwitchNavigator from './src/navigation/SwitchNavigator'
-import LoginScreen from './src/screens/LoginScreen'
+import { createStore, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
+import thunkMiddleware from 'redux-thunk'
 
-function HomeScreen(){
-  return(
-     <View style={{ flex: 1, alignItem: 'center', justifyContent: 'center' }}>
-       <Text>Home Screen</Text>
-     </View>  
-  );
-}
+import SwitchNavigator from './src/navigation/SwitchNavigator'
+import reducer from './src/reducers';
+
+
+const middleware = applyMiddleware(thunkMiddleware);
+const store = createStore(reducer,middleware);
 
 //const Stack = createStackNavigator();
-
 
 /*
    <NavigationContainer>
@@ -26,7 +24,9 @@ function HomeScreen(){
 */
 function App(){
   return(     
+    <Provider store={store}>
      <SwitchNavigator /> 
+    </Provider> 
   );
 }
 

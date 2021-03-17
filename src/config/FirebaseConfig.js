@@ -1,4 +1,5 @@
 import firebase from 'firebase';
+import 'firebase/firestore'
 
 const firebaseConfig = {
     apiKey: "AIzaSyC08IgFXONWWSPSJX9YH_MUs23o9rHWULI",
@@ -13,5 +14,11 @@ const firebaseConfig = {
 //databaseURL: 'https://expense-tracker-5002f.firebaseio.com',
 // Initialize Firebase
 const Firebase = firebase.initializeApp(firebaseConfig);
+
+export const db = firebase.firestore()
+
+db.settings({
+    timestampsInSnapshots: true
+});
 
 export default Firebase;

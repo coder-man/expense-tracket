@@ -1,6 +1,10 @@
 import React from 'react';
 import { View, TextInput, StyleSheet, TouchableOpacity, Text, Button, ToastAndroid } from 'react-native';
 
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux';
+import { updateEmail, updatePassword, signup } from '../actions/user'
+
 import Firebase from '../config/FirebaseConfig'
 
 class SignupScreen extends React.Component{
@@ -17,18 +21,13 @@ class SignupScreen extends React.Component{
     }
 
     handleSignUp = () => {
-        const { email, password } = this.state;
-        //console.log('Signup press', email, password);
-        ToastAndroid.show('Submit click', ToastAndroid.SHORT);
-        Firebase.auth()
-            .createUserWithEmailAndPassword(email, password)
-            .then(() => this.props.navigation.navigate('ProfileScreen'))
-            .catch(error => console.log(error)); 
+      this.props.signup();
+      this.props.navigation.navigate('ProfileScreen');
     }
 
     render(){
         return(
-            <View style={StyleSheet.container}>
+            <View style={styles.container}>
                 <TextInput
                    style={styles.inputBox}
                    value={this.state.name}
@@ -38,16 +37,16 @@ class SignupScreen extends React.Component{
 
                 <TextInput 
                     style={styles.inputBox} 
-                    value={this.state.email}
-                    onChangeText={email => this.setState({ email })}
+                    value={this.props.user.email}
+                    onChangeText={email => this.props.updateEmail(email)}
                     placeholder='Email'
                     autoCapitalize='none'
                 />
 
                 <TextInput
                    style={styles.inputBox}
-                   value={this.state.password}
-                   onChangeText= { password => this.setState({ password }) }
+                   value={this.props.user.password}
+                   onChangeText= { password => this.props.updatePassword(password)}
                    placeholder = 'Password'
                    securityTextEntry={true}
                 />
@@ -63,7 +62,7 @@ class SignupScreen extends React.Component{
 const styles = StyleSheet.create({
     container:{
         flex: 1,
-        backgroundColor: '#ffffff',
+        backgroundColor: '#a54de8',
         alignItems: 'center',
         justifyContent: 'center'
     },
@@ -97,4 +96,18 @@ const styles = StyleSheet.create({
     }
 })
 
-export default SignupScreen;
+
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators({ updateEmail, updatePassword, signup }, dispatch)
+}
+
+const mapStateToProps = state => {
+    return {
+        user: state.user
+    }
+}
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(SignupScreen);
