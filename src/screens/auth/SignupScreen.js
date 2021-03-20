@@ -1,11 +1,11 @@
 import React from 'react';
-import { View, TextInput, StyleSheet, TouchableOpacity, Text, Button, ToastAndroid } from 'react-native';
+import { View, TextInput, StyleSheet, TouchableOpacity, Text, Button, ToastAndroid, Image } from 'react-native';
 
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
-import { updateEmail, updatePassword, signup } from '../actions/user'
+import { updateEmail, updatePassword, signup } from '../../actions/user'
 
-import Firebase from '../config/FirebaseConfig'
+import Firebase from '../../config/FirebaseConfig'
 
 class SignupScreen extends React.Component{
 
@@ -28,6 +28,8 @@ class SignupScreen extends React.Component{
     render(){
         return(
             <View style={styles.container}>
+                <Image source={{ uri: 'https://reactnative.dev/docs/assets/p_cat1.png' }}  style={{ width: 50, height: 50 }} />
+
                 <TextInput
                    style={styles.inputBox}
                    value={this.state.name}
@@ -62,7 +64,7 @@ class SignupScreen extends React.Component{
 const styles = StyleSheet.create({
     container:{
         flex: 1,
-        backgroundColor: '#a54de8',
+        backgroundColor: '#7bada8',
         alignItems: 'center',
         justifyContent: 'center'
     },

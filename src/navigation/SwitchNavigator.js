@@ -1,8 +1,9 @@
 import React from 'react'
 import { createSwitchNavigator, createAppContainer } from 'react-navigation'
-import LoginScreen from '../screens/LoginScreen'
-import SignupScreen from '../screens/SignupScreen'
-import ProfileScreen from '../screens/ProfileScreen'
+import LoginScreen from '../screens/auth/LoginScreen'
+import SignupScreen from '../screens/auth/SignupScreen'
+import ProfileScreen from '../screens/auth/ProfileScreen'
+import DashboardScreen from '../screens/dashboard/DashboardScreen'
 
 const SwitchNavigator = createSwitchNavigator({
         LoginScreen:{
@@ -13,6 +14,9 @@ const SwitchNavigator = createSwitchNavigator({
         },
         ProfileScreen:{
             screen: ProfileScreen
+        },
+        DashboardScreen:{
+            screen: DashboardScreen
         }
 },{
     initialRouteName: 'LoginScreen'

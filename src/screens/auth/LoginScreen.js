@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import { View, TextInput, StyleSheet, TouchableOpacity, Text, Button, ToastAndroid } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { updateEmail, updatePassword, login, getUser } from '../actions/user'
+import { updateEmail, updatePassword, login, getUser, google_signin } from '../../actions/user'
+import { GoogleSignin, GoogleSigninButton, statusCodes } from 'react-native-google-signin';
 
-import Firebase from '../config/FirebaseConfig';
+import Firebase from '../../config/FirebaseConfig';
 
 class LoginScreen extends Component{
 
@@ -35,20 +36,28 @@ class LoginScreen extends Component{
                   onChangeText={password => this.props.updatePassword(password)}
                   placeholder = 'Password'
                   secureTextEntry={true}
-              />  
+              />
               <TouchableOpacity style={styles.button} onPress={() => this.props.login()}>
                   <Text style={styles.buttonText}>Login</Text>
-              </TouchableOpacity>    
+              </TouchableOpacity>
               <Button title="Don't have an account yet? Sign up" onPress={() => this.props.navigation.navigate('SignupScreen')} />
-           </View>       
-        ); 
+              <GoogleSigninButton
+                style={{ width: 192, height: 48 }}
+                size={GoogleSigninButton.Size.Wide}
+                color={GoogleSigninButton.Color.Dark}
+                onPress={() => this.props.google_signin()}
+              />
+
+
+           </View>
+        );
     }
 }
 
 const styles = StyleSheet.create({
     container:{
         flex: 1,
-        backgroundColor: '#a54de8',
+        backgroundColor: '#7bada8',
         alignItems: 'center',
         justifyContent: 'center'
     },
@@ -83,7 +92,7 @@ const styles = StyleSheet.create({
 });
 
 const mapDispatchToProps = dispatch => {
-    return bindActionCreators({ updateEmail, updatePassword, login, getUser}, dispatch);
+    return bindActionCreators({ updateEmail, updatePassword, login, getUser, google_signin}, dispatch);
 }
 
 const mapStateToProps = state => {
