@@ -3,20 +3,14 @@ import { View, TextInput, StyleSheet, TouchableOpacity, Text, Button, ToastAndro
 
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
-import { updateEmail, updatePassword, signup } from '../../actions/user'
+import { updateName, updateEmail, updatePassword, updateConfpassword, signup } from '../../actions'
 
 import Firebase from '../../config/FirebaseConfig'
 
 class SignupScreen extends React.Component{
 
     constructor(props){
-        super(props);
-        this.state = {
-            showToast: false,
-            name: '',
-            email: '',
-            password: ''
-        }
+        super(props);        
        // this.handleSignUp = this.handleSignUp.bind(this);
     }
 
@@ -28,13 +22,14 @@ class SignupScreen extends React.Component{
     render(){
         return(
             <View style={styles.container}>
-                <Image source={{ uri: 'https://reactnative.dev/docs/assets/p_cat1.png' }}  style={{ width: 50, height: 50 }} />
+                <Image source={require('../../images/indian_currency.png')}  style={{ width: 100, height: 70 }} />
 
                 <TextInput
                    style={styles.inputBox}
-                   value={this.state.name}
-                   onChangeText={name => this.setState({ name })}
+                   value={ this.props.user.name }
+                   onChangeText={name => this.props.updateName({ name })}
                    placeholder = 'Full Name'
+                   placeholderTextColor='#FFFFFF'
                 />
 
                 <TextInput 
@@ -42,6 +37,7 @@ class SignupScreen extends React.Component{
                     value={this.props.user.email}
                     onChangeText={email => this.props.updateEmail(email)}
                     placeholder='Email'
+                    placeholderTextColor='#FFFFFF'
                     autoCapitalize='none'
                 />
 
@@ -50,8 +46,19 @@ class SignupScreen extends React.Component{
                    value={this.props.user.password}
                    onChangeText= { password => this.props.updatePassword(password)}
                    placeholder = 'Password'
+                   placeholderTextColor='#FFFFFF'
                    securityTextEntry={true}
                 />
+
+                <TextInput
+                    style={styles.inputBox}
+                    value={this.props.user.conf_password}
+                    onChangeText = { conf_password => this.props.updateConfpassword(conf_password)}
+                    placeholder = 'Confirm Password'
+                    placeholderTextColor='#FFFFFF'
+                    securityTextEntry={true} 
+                />
+
                 <TouchableOpacity style={styles.button} onPress={this.handleSignUp}>
                     <Text style={styles.bottonText}>Signup</Text>
                 </TouchableOpacity>
@@ -100,7 +107,7 @@ const styles = StyleSheet.create({
 
 
 const mapDispatchToProps = dispatch => {
-    return bindActionCreators({ updateEmail, updatePassword, signup }, dispatch)
+    return bindActionCreators({ updateName, updateEmail, updatePassword, updateConfpassword, signup }, dispatch)
 }
 
 const mapStateToProps = state => {

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { View, TextInput, StyleSheet, TouchableOpacity, Text, Button, ToastAndroid } from 'react-native';
+import { View, TextInput, StyleSheet, TouchableOpacity, Text, Button, ToastAndroid, Image } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { updateEmail, updatePassword, login, getUser, google_signin } from '../../actions/user'
+import { updateEmail, updatePassword, login, getUser, google_signin } from '../../actions'
 import { GoogleSignin, GoogleSigninButton, statusCodes } from 'react-native-google-signin';
 
 import Firebase from '../../config/FirebaseConfig';
@@ -23,11 +23,13 @@ class LoginScreen extends Component{
     render(){
         return(
            <View style={styles.container}>
+              <Image source={require('../../images/indian_currency.png')}  style={{ width: 100, height: 70 }} />
               <TextInput
                  style={styles.inputBox}
                  value={this.props.user.email}
                  onChangeText={email => this.props.updateEmail(email)}
                  placeholder = 'Email'
+                 placeholderTextColor='#FFFFFF'
                  autoCapitalize = 'none'
               />
               <TextInput
@@ -35,6 +37,7 @@ class LoginScreen extends Component{
                   value= {this.props.user.password}
                   onChangeText={password => this.props.updatePassword(password)}
                   placeholder = 'Password'
+                  placeholderTextColor='#FFFFFF'
                   secureTextEntry={true}
               />
               <TouchableOpacity style={styles.button} onPress={() => this.props.login()}>

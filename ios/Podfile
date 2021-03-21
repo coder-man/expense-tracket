@@ -12,6 +12,8 @@ target 'expense_tracker' do
     :hermes_enabled => false
   )
 
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
   target 'expense_trackerTests' do
     inherit! :complete
     # Pods for testing

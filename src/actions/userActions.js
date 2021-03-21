@@ -3,9 +3,11 @@ import firebase from 'firebase';
 import { GoogleSignin, GoogleSigninButton, statusCodes } from 'react-native-google-signin';
 
 // Define Types
-
+export const UPDATE_NAME = 'UPDATE_NAME';
 export const UPDATE_EMAIL = 'UPDATE_EMAIL';
 export const UPDATE_PASSWORD = 'UPDATE_PASSWORD';
+export const UPDATE_CONFPASSWORD = 'UPDATE_CONFPASSWORD';
+
 export const LOGIN = 'LOGIN';
 export const SIGNUP = 'SIGNUP';
 
@@ -16,18 +18,31 @@ export const FACEBOOK_SIGNUP = 'FACEBOOK_SIGNUP';
 export const FACEBOOK_LOGIN = 'FACEBOOK_LOGIN';
 
 // Action Creator
+export const updateName = name => {
+    return {
+        type: UPDATE_NAME,
+        payload: name,
+    }
+}
 
 export const updateEmail = email => {
     return {
         type: UPDATE_EMAIL,
-        payload: email
+        payload: email,
     }
 }
 
 export const updatePassword = (password) => {
     return {
         type: UPDATE_PASSWORD,
-        payload: password
+        payload: password,
+    }
+}
+
+export const updateConfpassword = (conf_password) => {
+    return {
+        type: UPDATE_CONFPASSWORD,
+        payload: conf_password,
     }
 }
 
@@ -36,7 +51,23 @@ export const login = () => {
         try{
             const { email, password } = getState().user;
             const response = await Firebase.auth().signInWithEmailAndPassword(email, password);
-            dispatch(getUser(response.user.uid))
+            if(response){
+                const uid = response.user.uid;
+                const usersRef = firebase.firestore().collection('users');
+
+                usersRef.doc(uid)
+                        .get()
+                        .then((firestroeDocument) =>{
+                            if(!firestoreDocument.exists){
+                                alert("User does not exist anymore");
+                                return;
+                            }
+                            const user = firestoreDocument.data();
+                            dispatch(getUser(response.user));
+                        });    
+            } else {
+                alert('Login fail');
+            }            
 
         } catch(e){
             alert(e);
@@ -62,20 +93,40 @@ export const getUser = uid => {
 export const signup = () => {
     return async (dispatch, getState) => {
         try{
-           const { email, password } = getState().user;
+           const { name, email, password, conf_password } = getState().user;
+           if( password === conf_password){
            const response = await Firebase.auth().createUserWithEmailAndPassword(email, password);
             if(response.user.uid){
-                const user = {
+                const uid = response.user.uid;
+                const user_data = {
+                    id : uid,
+                    name,
+                    email,
+                };
+
+                const usersRef = firebase.firestore().collection('users');
+                      usersRef
+                          .doc(uid)
+                          .set(user_data)
+                          .then(() => {
+                            dispatch({ type: SIGNUP, payload: response.user });
+                          })
+                          .catch((error) => alert(error));  
+
+               /* const user = {
                     uid: response.user.uid,
                     email: email
                 }
 
                 db.collection('users')
                     .doc(response.user.uid)
-                    .set(user)
+                    .set(user); */
             }
 
            dispatch({ type: SIGNUP, payload: response.user });
+        } else {
+            alert('Password Not Matched');
+        }
         } catch(e){
             alert(e);
         }
