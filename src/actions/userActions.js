@@ -1,5 +1,4 @@
 import Firebase, { db } from '../config/FirebaseConfig';
-import firebase from 'firebase';
 import { GoogleSignin, GoogleSigninButton, statusCodes } from 'react-native-google-signin';
 
 // Define Types
@@ -53,7 +52,7 @@ export const login = () => {
             const response = await Firebase.auth().signInWithEmailAndPassword(email, password);
             if(response){
                 const uid = response.user.uid;
-                const usersRef = firebase.firestore().collection('users');
+                const usersRef = Firebase.firestore().collection('users');
 
                 usersRef.doc(uid)
                         .get()
@@ -70,7 +69,7 @@ export const login = () => {
             }            
 
         } catch(e){
-            alert(e);
+            console.log(e);
         }
     }
 }
@@ -85,7 +84,7 @@ export const getUser = uid => {
 
             dispatch({ type: LOGIN, payload: user.data() });
         } catch(e){
-            alert(e);
+            console.log(e);
         }
     }
 }
@@ -104,14 +103,14 @@ export const signup = () => {
                     email,
                 };
 
-                const usersRef = firebase.firestore().collection('users');
+                const usersRef = Firebase.firestore().collection('users');
                       usersRef
                           .doc(uid)
                           .set(user_data)
                           .then(() => {
                             dispatch({ type: SIGNUP, payload: response.user });
                           })
-                          .catch((error) => alert(error));  
+                          .catch((error) => console.log(error));  
 
                /* const user = {
                     uid: response.user.uid,
@@ -128,7 +127,7 @@ export const signup = () => {
             alert('Password Not Matched');
         }
         } catch(e){
-            alert(e);
+            console.log(e);
         }
     }
 }
@@ -148,15 +147,15 @@ export const google_signin = () => {
         await GoogleSignin.hasPlayServices();
         const { accessToken, idToken, type } = await GoogleSignin.signIn();
         // code to user login and update to users
-        const credential = firebase.auth.GoogleAuthProvider.credential(idToken, accessToken);
-              firebase.auth().signInWithCredential(credential).then((data) => {
-                const { currentUser } = firebase.auth();
+        const credential = Firebase.auth.GoogleAuthProvider.credential(idToken, accessToken);
+              Firebase.auth().signInWithCredential(credential).then((data) => {
+                const { currentUser } = Firebase.auth();
                 dispatch(getUser(currentUser.uid));
               }).catch((error) => {
                   alert(error.toString());
               });
       } catch(e){
-        alert(e);
+        console.log(e);
       }
     }
 }

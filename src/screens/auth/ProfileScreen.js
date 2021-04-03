@@ -7,30 +7,43 @@ class ProfileScreen extends Component{
 
     logOut = () => {
         Firebase.auth().signOut().then(() => {
-            this.props.navigation.navigate('LoginScreen')            
+            this.props.navigation.navigate('LoginScreen')
         }).catch(error => console.log(error));
     }
 
     render(){
         return(
-           <Fragment> 
-           <View style={styles.container}>             
+           <Fragment>
+           <View style={styles.container}>
                   <Text>Profile Screen</Text>
                   <Text>{ this.props.user.email }</Text>
                   <Button
                     color="#3740FE"
                     title="Logout"
                     onPress={() => this.logOut()}
-                  />                  
+                  />
            </View>
            <View style={styles.container}>
               <Button
                  title="To Dashboard"
                  onPress={() => this.props.navigation.navigate('DashboardScreen')}
-              />  
+              />
            </View>
-          </Fragment>     
-        ); 
+           <View style={styles.container}>
+               <Button
+                   title="Some Test"
+                   onPress={() => this.props.navigation.navigate('TestScreen')}
+               />
+
+           </View>
+           <View style={styles.container}>
+             <Button title="Font Test" onPress={() => this.props.navigation.navigate('TextScreen')} />
+           </View>
+           <View style={styles.container}>
+             <Button title="Native Base Test" onPress={() => this.props.navigation.navigate('NbaseScreen')} />  
+           </View>
+          </Fragment>
+        );
     }
 }
 
